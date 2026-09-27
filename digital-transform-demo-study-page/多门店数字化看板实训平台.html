@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多门店销售数据孤岛治理与数字化分析看板 · 实训学习平台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%232563eb'/%3E%3Cpath d='M5 14l4-4 3 3 5-6' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#ffffff;--bg-soft:#f7f8fa;--panel:#ffffff;--ink:#111827;--ink-2:#374151;--ink-3:#6b7280;--line:#e5e7eb;--brand:#2563eb;--brand-2:#1d4ed8;--brand-soft:#eff6ff;--brand-line:#bfdbfe;--ok:#059669;--ok-soft:#ecfdf5;--warn:#d97706;--warn-soft:#fffbeb;--err:#dc2626;--err-soft:#fef2f2;--code-bg:#0f172a;--code-ink:#e2e8f0;--shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);--radius:10px;--sidebar-w:248px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+h1,h2,h3,h4{line-height:1.35;font-weight:700;letter-spacing:-.01em}
+h2{font-size:22px;margin-bottom:4px}h3{font-size:17px;margin:22px 0 10px}p{margin:8px 0}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--bg-soft);border-right:1px solid var(--line);overflow-y:auto;z-index:40;padding:18px 0 40px}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 18px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}.brand .logo{width:34px;height:34px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex:none}.brand .logo svg{width:20px;height:20px}.brand .t{font-weight:700;font-size:14px;line-height:1.3}.brand .s{font-size:11px;color:var(--ink-3)}
+.nav-title{font-size:11px;color:var(--ink-3);letter-spacing:.05em;padding:14px 20px 6px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;color:var(--ink-2);border-left:3px solid transparent;font-size:13.5px}.nav-item:hover{background:rgba(37,99,235,.06);color:var(--ink)}.nav-item.active{background:var(--brand-soft);color:var(--brand-2);border-left-color:var(--brand);font-weight:600}.nav-item .n{width:20px;height:20px;border-radius:5px;background:#fff;border:1px solid var(--line);color:var(--ink-3);font-size:11px;display:flex;align-items:center;justify-content:center;flex:none;font-weight:600}.nav-item.active .n{background:var(--brand);border-color:var(--brand);color:#fff}
+.sub{display:none;padding-left:50px;font-size:12.5px;color:var(--ink-3)}.nav-item.open+.sub{display:block}.sub a{display:block;padding:5px 0;color:var(--ink-3)}.sub a.active{color:var(--brand);font-weight:600}
+.main{margin-left:var(--sidebar-w);min-height:100vh;background:var(--bg)}
+.view{display:none;padding:40px 48px 80px;max-width:1060px}.view.active{display:block}
+.breadcrumb{font-size:12px;color:var(--ink-3);margin-bottom:14px}.breadcrumb b{color:var(--ink-2);font-weight:600}
+.hero{background:linear-gradient(135deg,#eff6ff 0%,#ffffff 60%);border:1px solid var(--brand-line);border-radius:14px;padding:34px 36px;margin-bottom:28px}.hero .tag{display:inline-block;background:var(--brand);color:#fff;font-size:11px;padding:3px 12px;border-radius:20px;letter-spacing:.04em;font-weight:600;margin-bottom:14px}.hero h1{font-size:30px;margin-bottom:12px}.hero p{color:var(--ink-2);max-width:760px}.hero .stats{display:flex;gap:30px;margin-top:22px;flex-wrap:wrap}.stat b{display:block;font-size:24px;color:var(--brand-2)}.stat span{font-size:12.5px;color:var(--ink-3)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin:14px 0;box-shadow:var(--shadow)}.card h3{margin-top:0}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.kpi{padding:16px 18px}.kpi b{font-size:20px;color:var(--brand-2);display:block;margin-bottom:2px}.kpi span{font-size:12.5px;color:var(--ink-3)}
+.pill{display:inline-block;background:var(--bg-soft);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12px;color:var(--ink-2);margin:3px 3px 0 0}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600}.b-blue{background:var(--brand-soft);color:var(--brand-2)}.b-green{background:var(--ok-soft);color:var(--ok)}.b-warn{background:var(--warn-soft);color:var(--warn)}.b-red{background:var(--err-soft);color:var(--err)}
+.callout{border-radius:var(--radius);padding:14px 18px;margin:14px 0;font-size:14px}.callout .t{font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}.co-info{background:var(--brand-soft);border:1px solid var(--brand-line)}.co-info .t{color:var(--brand-2)}.co-warn{background:var(--warn-soft);border:1px solid #fde68a}.co-warn .t{color:var(--warn)}.co-err{background:var(--err-soft);border:1px solid #fecaca}.co-err .t{color:var(--err)}.co-ok{background:var(--ok-soft);border:1px solid #a7f3d0}.co-ok .t{color:var(--ok)}
+.code-block{background:var(--code-bg);color:var(--code-ink);border-radius:var(--radius);margin:14px 0;overflow:hidden}.code-block .cb-head{display:flex;justify-content:space-between;align-items:center;background:#1e293b;padding:7px 14px;font-size:12px;color:#94a3b8;border-bottom:1px solid #334155}.code-block pre{padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.65}.tok-k{color:#93c5fd}.tok-s{color:#fbbf24}.tok-c{color:#64748b;font-style:italic}.tok-n{color:#f9a8d4}.tok-f{color:#6ee7b7}.tok-p{color:#cbd5e1}.tok-b{color:#fda4af}
+.editor{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:14px 0;background:var(--panel)}.editor .ed-head{display:flex;justify-content:space-between;align-items:center;background:var(--bg-soft);border-bottom:1px solid var(--line);padding:8px 14px}.editor .ed-head .fname{font-size:12px;color:var(--ink-3);font-weight:600}.editor textarea{width:100%;border:none;outline:none;resize:vertical;min-height:180px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.6;background:var(--code-bg);color:#e2e8f0;tab-size:4}.editor textarea::-webkit-scrollbar{width:8px;height:8px}.editor textarea::-webkit-scrollbar-thumb{background:#475569;border-radius:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}.btn:hover{background:var(--brand-2)}.btn.ghost{background:#fff;color:var(--ink-2);border:1px solid var(--line)}.btn.ghost:hover{background:var(--bg-soft);color:var(--ink)}.btn.sm{padding:5px 12px;font-size:12px}.btn.ok{background:var(--ok)}
+.out{border:1px solid var(--line);border-radius:7px;margin-top:12px;display:none}.out .out-head{background:var(--bg-soft);padding:7px 12px;font-size:12px;font-weight:700;color:var(--ink-2);border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.out .out-body{padding:12px 14px;background:#fbfdff;font-size:13px;overflow-x:auto;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.out.show{display:block}.out .dim{color:var(--ink-3);font-size:12px;white-space:normal}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;table-layout:fixed}th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}th{background:var(--bg-soft);font-weight:700;color:var(--ink-2)}tr:nth-child(even) td{background:#fcfcfd}.tbl-wrap{overflow-x:auto}
+.timeline{display:grid;grid-template-columns:90px 1fr;gap:0;margin:16px 0}.tl-row{display:grid;grid-template-columns:90px 1fr;grid-column:1/-1;position:relative}.tl-time{padding:14px 14px 14px 0;font-weight:700;color:var(--brand-2);font-size:14px;border-top:2px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}.tl-body{padding:12px 0 12px 20px;border-top:2px solid var(--line);border-left:2px solid var(--brand-line)}.tl-row:first-child .tl-time,.tl-row:first-child .tl-body{border-top-color:transparent}.tl-row .tl-body .tl-dot{position:absolute;left:0;transform:translateX(-7px);width:12px;height:12px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand)}.tl-body .stage{font-weight:700;color:var(--ink)}.tl-body .desc{font-size:13px;color:var(--ink-2);margin-top:3px}.tl-body .tec{font-size:12px;color:var(--ink-3);margin-top:4px}
+.arch{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0}.arch .stage{background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:9px;padding:9px 18px;font-size:13.5px;font-weight:600;color:var(--brand-2);text-align:center;min-width:230px}.arch .stage small{display:block;font-weight:400;color:var(--ink-3);font-size:11.5px;margin-top:2px}.arch .arr{color:var(--brand);font-size:16px;line-height:1}
+.q{border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:12px 0;background:var(--panel)}.q .q-type{font-size:11px;padding:2px 8px;border-radius:4px;margin-right:8px;font-weight:700}.q .q-title{font-weight:600;font-size:14.5px}.q .q-options{margin:10px 0 0}.q .q-opt{display:flex;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;align-items:flex-start;font-size:13.5px}.q .q-opt:hover{background:var(--bg-soft)}.q .q-opt input{margin-top:3px}.q .q-opt.correct{background:var(--ok-soft);color:var(--ok)}.q .q-opt.wrong{background:var(--err-soft);color:var(--err)}.q .q-feedback{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:13.5px}.q .q-feedback.show{display:block}.q .q-feedback .ans{background:var(--ok-soft);color:var(--ok);padding:6px 10px;border-radius:6px;margin-bottom:6px;font-weight:600}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:7px 0;cursor:pointer;background:var(--panel);transition:background .15s}.check:hover{background:var(--bg-soft)}.check input{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--brand)}.check.done{background:var(--ok-soft);border-color:#a7f3d0}.check.done .c-txt{color:var(--ok);text-decoration:line-through}.check .c-txt{font-size:13.5px}.check .c-txt small{display:block;color:var(--ink-3);font-size:12px;text-decoration:none}
+.section-title{display:flex;align-items:center;gap:12px;margin:34px 0 6px;padding-top:24px;border-top:1px solid var(--line)}.section-title .ic{width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:none}.section-title h2{margin:0}.section-title .en{font-size:12px;color:var(--ink-3)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.tab{padding:6px 14px;border-radius:7px;border:1px solid var(--line);font-size:13px;cursor:pointer;background:var(--panel);color:var(--ink-2)}.tab:hover{border-color:var(--brand-line)}.tab.active{background:var(--brand);color:#fff;border-color:var(--brand)}.tab-pane{display:none}.tab-pane.active{display:block}
+.menu-toggle{display:none;position:fixed;top:14px;right:16px;z-index:60;background:var(--brand);color:#fff;border:none;border-radius:8px;width:42px;height:42px;font-size:20px;cursor:pointer}
+.progress-top{position:fixed;top:0;left:0;height:3px;background:var(--brand);z-index:70;width:0}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:transform .25s;box-shadow:none}.sidebar.open{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.15)}.main{margin-left:0;padding-top:0}.view{padding:24px 18px 60px}.menu-toggle{display:flex;align-items:center;justify-content:center}.g2,.g3,.g4{grid-template-columns:1fr}.hero{padding:24px 20px}.hero h1{font-size:23px}.timeline,.tl-row{grid-template-columns:66px 1fr}.tl-time{font-size:12.5px}.editor textarea{font-size:16px}.q-opt input{width:20px;height:20px}}
+.footer{max-width:1060px;margin:0 auto;padding:0 48px 40px;color:var(--ink-3);font-size:12.5px}
+@media(max-width:900px){.footer{padding:0 18px 30px}}
+.scroll-top{position:fixed;right:18px;bottom:18px;width:40px;height:40px;border-radius:10px;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:18px;z-index:50;display:none}
+</style>
+</head>
+<body>
+<div class="progress-top" id="progressTop"></div>
+<button class="menu-toggle" id="menuToggle" aria-label="菜单">☰</button>
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M5 14l4-4 3 3 5-6" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="t">多门店数据孤岛治理</div><div class="s">数字化分析看板 · 实训</div></div></div>
+  <div class="nav-title">学习导航</div>
+  <div class="nav-item" data-view="m1"><span class="n">1</span>项目总览</div>
+  <div class="nav-item" data-view="m2"><span class="n">2</span>环境预习</div>
+  <div class="nav-item" data-view="m3" data-sub="1"><span class="n">3</span>分阶段实训<span style="margin-left:auto;font-size:11px;color:var(--ink-3)">▸</span></div>
+  <div class="sub" id="sub-m3"><a data-subview="3-1">3.1 MySQL建库+造数</a><a data-subview="3-2">3.2 Python抽取上传HDFS</a><a data-subview="3-3">3.3 Hive数仓分层建表</a><a data-subview="3-4">3.4 PySpark数据清洗</a><a data-subview="3-5">3.5 PySpark指标聚合</a><a data-subview="3-6">3.6 Flask+ECharts看板</a></div>
+  <div class="nav-item" data-view="m4"><span class="n">4</span>核心概念题库</div>
+  <div class="nav-item" data-view="m5"><span class="n">5</span>项目踩坑手册</div>
+  <div class="nav-item" data-view="m6"><span class="n">6</span>本地实操检查清单</div>
+  <div class="nav-title">线下实操</div>
+  <div class="nav-item" data-view="m7"><span class="n">✓</span>实操任务打卡</div>
+</aside>
+<div class="main" id="main">
+<!-- ============ 视图 1：项目总览 ============ -->
+<section class="view active" id="view-m1">
+  <div class="breadcrumb">首页 / <b>模块一 · 项目总览</b></div>
+  <div class="hero"><span class="tag">实训项目 · 大数据全链路</span><h1>多门店销售数据孤岛治理<br>与数字化分析看板</h1><p>以「多门店各自为政、数据互不相通」的真实业务痛点切入，构建一条从<b>业务库 → 数据采集 → 数仓分层 → 数据清洗 → 指标聚合 → 可视化看板</b>的完整大数据链路。本平台用于<b>线上预习与代码模拟练习</b>，学会后再到你的本地真实环境实操。</p><div class="stats"><div class="stat"><b>6</b><span>个核心模块</span></div><div class="stat"><b>12</b><span>天学习路线</span></div><div class="stat"><b>7</b><span>层数据链路</span></div><div class="stat"><b>4</b><span>种核心组件</span></div></div></div>
+  <div class="section-title"><div class="ic">●</div><div><h2>项目背景与业务痛点</h2><span class="en">Business Background</span></div></div>
+  <div class="grid g3"><div class="card kpi"><b>数据孤岛</b><span>各门店独立收银/会员系统，数据互不相通，无法横向对比</span></div><div class="card kpi"><b>口径不一</b><span>门店间字段、单位、命名混乱，总部难以统一统计</span></div><div class="card kpi"><b>报表滞后</b><span>人工汇总 Excel，日报延迟且易出错，缺乏实时洞察</span></div><div class="card kpi"><b>无法决策</b><span>缺乏统一指标库，管理层无法看到全盘经营全局</span></div><div class="card kpi"><b>成本高企</b><span>每个门店一套系统，重复建设、运维成本高</span></div><div class="card kpi"><b>无数据资产</b><span>历史数据散落，难以沉淀为可复用的数据资产</span></div></div>
+  <div class="callout co-info"><div class="t">核心思路</div>通过「采集各门店业务库数据 → 统一进入 HDFS → 按 ODS/DWD/DWS 分层建模 → PySpark 清洗与聚合 → 落库 MySQL 指标库 → Flask + ECharts 输出可视化看板」，把散落的数据孤岛汇聚成<b>企业级统一指标视图</b>。</div>
+  <div class="section-title"><div class="ic">▤</div><div><h2>项目技术架构</h2><span class="en">Architecture</span></div></div>
+  <div class="card"><div class="arch"><div class="stage">业务系统 · 多门店 MySQL<small>shop_a / shop_b 独立业务库</small></div><div class="arr">↓</div><div class="stage">数据采集层 · Python<small>读取 MySQL → 写入 HDFS</small></div><div class="arr">↓</div><div class="stage">存储层 · HDFS<small>分布式文件系统，原始数据落地</small></div><div class="arr">↓</div><div class="stage">数仓分层 · Hive<small>ODS 贴源层 / DWD 明细层 / DWS 汇总层</small></div><div class="arr">↓</div><div class="stage">计算层 · PySpark<small>数据清洗(DWD) → 指标聚合(DWS)</small></div><div class="arr">↓</div><div class="stage">指标库 · MySQL<small>汇总结果落库，供展示</small></div><div class="arr">↓</div><div class="stage">展示层 · Flask + ECharts<small>Web 看板，图表化经营指标</small></div></div></div>
+  <div class="section-title"><div class="ic">⚙</div><div><h2>技术栈清单</h2><span class="en">Tech Stack</span></div></div>
+  <div class="card"><h3>与你本地环境版本完全匹配</h3><div><span class="pill">MySQL 8.0（本机）</span><span class="pill">MySQL 5.7.38（虚拟机）</span><span class="pill">Python 3.8</span><span class="pill">PySpark 3.1.2</span><span class="pill">Hadoop 3.1.3</span><span class="pill">Hive 3.1.2</span><span class="pill">Scala 2.12.10</span><span class="pill">Flask</span><span class="pill">ECharts</span><span class="pill">HDFS</span></div><div class="grid g2" style="margin-top:16px"><div><h3>数据侧</h3><p style="font-size:13.5px;color:var(--ink-2)">业务库 MySQL → 采集脚本 Python(PyMySQL) → 存储 HDFS → 数仓 Hive(HiveQL) → 清洗聚合 PySpark</p></div><div><h3>展示侧</h3><p style="font-size:13.5px;color:var(--ink-2)">指标库 MySQL → 后端 Flask → 前端 ECharts（柱状/折线/饼图/排行）</p></div></div></div>
+  <div class="section-title"><div class="ic">➤</div><div><h2>12 天学习路线</h2><span class="en">Learning Roadmap</span></div></div>
+  <div class="timeline"><div class="tl-row"><div class="tl-time">第1天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">环境准备与数据孤岛认知</div><div class="desc">理解数据孤岛痛点，盘点本地环境（本机 + 虚拟机），确认组件版本</div><div class="tec">环境预习</div></div></div><div class="tl-row"><div class="tl-time">第2天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">MySQL 业务库设计</div><div class="desc">设计多门店业务表结构（订单、门店、商品、会员），建立 shop_a/shop_b</div><div class="tec">MySQL · DDL</div></div></div><div class="tl-row"><div class="tl-time">第3天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">模拟数据生成</div><div class="desc">Python 造数脚本，模拟多门店真实销售流水</div><div class="tec">Python · 数据生成</div></div></div><div class="tl-row"><div class="tl-time">第4天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">数据采集与上传 HDFS</div><div class="desc">Python 抽取 MySQL 数据，写入 HDFS 原始目录</div><div class="tec">PyMySQL · HDFS</div></div></div><div class="tl-row"><div class="tl-time">第5天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">Hive 数仓 ODS 层</div><div class="desc">在 Hive 建 ODS 贴源层表，把 HDFS 数据装载进数仓</div><div class="tec">Hive · ODS</div></div></div><div class="tl-row"><div class="tl-time">第6天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">Hive DWD 明细层</div><div class="desc">构建明细层表，统一口径、标准化字段</div><div class="tec">Hive · DWD</div></div></div><div class="tl-row"><div class="tl-time">第7天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">Hive DWS 汇总层</div><div class="desc">按维度构建汇总层，预聚合宽表</div><div class="tec">Hive · DWS</div></div></div><div class="tl-row"><div class="tl-time">第8天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">PySpark 数据清洗</div><div class="desc">读数仓数据，去重、清洗空值、标准化后写回 DWD</div><div class="tec">PySpark · DWD</div></div></div><div class="tl-row"><div class="tl-time">第9天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">PySpark 指标聚合</div><div class="desc">按门店/商品/时间聚合经营指标，写入 DWS 与指标库</div><div class="tec">PySpark · DWS</div></div></div><div class="tl-row"><div class="tl-time">第10天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">Flask 后端接口</div><div class="desc">构建 Web 后端，提供指标查询 API</div><div class="tec">Flask · API</div></div></div><div class="tl-row"><div class="tl-time">第11天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">ECharts 可视化看板</div><div class="desc">把指标库数据用图表呈现，完成看板</div><div class="tec">ECharts · 看板</div></div></div><div class="tl-row"><div class="tl-time">第12天</div><div class="tl-body"><span class="tl-dot"></span><div class="stage">全链路联调与验收</div><div class="desc">打通全链路，提交代码到 Gitee/GitHub，输出项目文档</div><div class="tec">联调 · 交付</div></div></div></div>
+  <div class="callout co-ok"><div class="t">平台使用说明</div>本网页仅用于<b>学习、预习与代码模拟练习</b>，所有"运行"均为<b>演示输出</b>，不会连接你的本地虚拟机或数据库。学完每个模块后，请按「本地实操检查清单」到真实环境实操。</div>
+</section>
+<!-- ============ 视图 2：环境预习 ============ -->
+<section class="view" id="view-m2">
+  <div class="breadcrumb">首页 / <b>模块二 · 环境预习</b></div>
+  <div class="hero"><span class="tag">环境预习</span><h1>你的大数据实验环境</h1><p>动手前先认清你手上这套环境：本机 Windows 与虚拟机 CentOS 各承担什么角色、版本如何匹配、有哪些<b>绝对不能踩的雷</b>。</p></div>
+  <div class="section-title"><div class="ic">▤</div><div><h2>环境全景</h2><span class="en">Environment Overview</span></div></div>
+  <div class="card"><div class="tbl-wrap"><table><colgroup><col style="width:18%"><col style="width:26%"><col style="width:34%"><col style="width:22%"></colgroup><tr><th>环境</th><th>组件与版本</th><th>角色/用途</th><th>访问方式</th></tr><tr><td rowspan="4"><b>本机 Windows</b></td><td>MySQL 8.0.29</td><td>业务库 + 指标库落库</td><td>localhost:3306</td></tr><tr><td>Anaconda base (3.9.7)</td><td>日常 Python 环境</td><td>python</td></tr><tr><td>pyspark38 (3.8 + PySpark 3.1.2)</td><td>PySpark 驱动/开发环境</td><td>conda activate pyspark38</td></tr><tr><td>PyCharm 社区版</td><td>代码开发 IDE</td><td>解释器选 pyspark38</td></tr><tr><td rowspan="4"><b>虚拟机 CentOS 7.9</b><br><small>192.168.112.128</small></td><td>Hadoop 3.1.3</td><td>HDFS 分布式存储</td><td>9870 / start-dfs.sh</td></tr><tr><td>Hive 3.1.2</td><td>数仓分层计算</td><td>hive</td></tr><tr><td>Spark 3.1.2 (bin-hadoop3.2)</td><td>分布式计算</td><td>spark://hadoop:7077</td></tr><tr><td>MySQL 5.7.38</td><td>Hive 元数据库</td><td>localhost:3306</td></tr></table></div></div>
+  <div class="section-title"><div class="ic">!</div><div><h2>环境使用注意事项（必修）</h2><span class="en">Critical Notes</span></div></div>
+  <div class="card"><div class="callout co-warn"><div class="t">禁止给虚拟机做快照</div>快照会大量占用 E 盘存储空间，导致磁盘爆满。如需回退请谨慎评估，不要随手打快照。</div><div class="callout co-err"><div class="t">HDFS 只能格式化一次</div><span style="font-family:ui-monospace,monospace">hdfs namenode -format</span> 仅在首次启动前执行一次，多次格式化会丢失全部数据。</div><div class="callout co-warn"><div class="t">PySpark 环境变量</div>Windows 驱动与虚拟机 worker 需 Python 版本一致（均 3.8）。连接虚拟机时显式指定：<span style="font-family:ui-monospace,monospace;font-size:12.5px">spark.pyspark.python=/opt/miniconda3/bin/python</span>，<b>不要</b>在 Windows 上把 PYSPARK_PYTHON 设成 Linux 路径。</div><div class="callout co-warn"><div class="t">不修改系统 JAVA_HOME</div>IDEA 自带 Java17，保护它；PySpark 请用 <span style="font-family:ui-monospace,monospace">PYSPARK_JAVA_HOME=D:\jdk1.8</span>。</div><div class="callout co-warn"><div class="t">不升级 / 不卸载</div>不要升级现有 Anaconda base、不要卸载已装软件，保持版本锁定：Hadoop3.1.3 + Spark3.1.2 + Scala2.12.10 + JDK1.8。</div><div class="callout co-info"><div class="t">防火墙规则</div>Windows 高级防火墙已放行 <span style="font-family:ui-monospace,monospace">Spark-Driver-Ports</span>（入站 TCP 40000-60000），供 Spark executor 回连 driver。不要全盘关闭防火墙。</div><div class="callout co-info"><div class="t">内存规划</div>虚拟机固定 4G 内存，跑大数据组件时尽量关闭 Windows 多余软件，避免内存不足卡顿或虚拟机闪退。</div></div>
+  <div class="section-title"><div class="ic">✓</div><div><h2>环境自测 · 选择题</h2><span class="en">Quiz</span></div></div>
+  <div class="q" data-qid="env1"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">关于 HDFS 的格式化，下列说法正确的是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="env1" value="A"><span>A. 每次重启都要格式化</span></label><label class="q-opt"><input type="radio" name="env1" value="B"><span>B. 只能格式化一次，多次会丢数据</span></label><label class="q-opt"><input type="radio" name="env1" value="C"><span>C. 格式化是自动执行的</span></label><label class="q-opt"><input type="radio" name="env1" value="D"><span>D. 格式化只会清空 NameNode，不影响 DataNode</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>HDFS 仅首次部署时格式化一次，NameNode 的 fsimage 已保存，重复格式化会使元数据与数据块对应关系错乱、数据丢失。</div></div>
+  <div class="q" data-qid="env2"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">Windows 端 PySpark 连接虚拟机 Spark 集群，应在 SparkSession 中指定？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="env2" value="A"><span>A. master("spark://hadoop:7077")</span></label><label class="q-opt"><input type="radio" name="env2" value="B"><span>B. master("local[*]")</span></label><label class="q-opt"><input type="radio" name="env2" value="C"><span>C. master("yarn") 且不指定地址</span></label><label class="q-opt"><input type="radio" name="env2" value="D"><span>D. 不需要指定 master</span></label></div><div class="q-feedback"><div class="ans">正确答案：A</div>连接独立集群需指定 master 为 spark://主机:7077。local[*] 仅在单机本地运行使用。</div></div>
+  <div class="q" data-qid="env3"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">给虚拟机做快照的主要风险是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="env3" value="A"><span>A. 会降低 CPU 性能</span></label><label class="q-opt"><input type="radio" name="env3" value="B"><span>B. 会占用大量 E 盘存储空间，可能导致磁盘爆满</span></label><label class="q-opt"><input type="radio" name="env3" value="C"><span>C. 会导致虚拟机无法开机</span></label><label class="q-opt"><input type="radio" name="env3" value="D"><span>D. 会让 IP 地址变化</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>快照会保存虚拟机完整状态，体积大、占 E 盘空间，积少成多容易爆盘。</div></div>
+  <div class="q" data-qid="env4"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">环境版本锁定正确的是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="env4" value="A"><span>A. Hadoop 3.1.3 + Spark 3.1.2 + Scala 2.12.10 + JDK1.8</span></label><label class="q-opt"><input type="radio" name="env4" value="B"><span>B. Hadoop 3.3 + Spark 3.5 + Scala 2.13 + JDK17</span></label><label class="q-opt"><input type="radio" name="env4" value="C"><span>C. 版本随意，能跑就行</span></label><label class="q-opt"><input type="radio" name="env4" value="D"><span>D. 只用 Hive，不用 Hadoop</span></label></div><div class="q-feedback"><div class="ans">正确答案：A</div>为避免组件间兼容问题，本项目版本已锁定，禁止混用其他版本。</div></div>
+</section>
+<!-- ============ 视图 3：分阶段实训 ============ -->
+<section class="view" id="view-m3">
+  <div class="breadcrumb">首页 / <b>模块三 · 分阶段实训</b></div>
+  <div class="hero"><span class="tag">分阶段实训</span><h1>按项目顺序，逐环节动手</h1><p>每个环节包含<b>知识点讲解</b>与<b>交互式代码练习</b>。代码编辑器支持<b>在线模拟运行</b>（仅演示输出，不连接真实环境），练熟后到本地实操。</p></div>
+  <div class="tabs" id="stageTabs"><div class="tab active" data-pane="3-1">3.1 MySQL建库+造数</div><div class="tab" data-pane="3-2">3.2 Python抽取上传HDFS</div><div class="tab" data-pane="3-3">3.3 Hive数仓分层建表</div><div class="tab" data-pane="3-4">3.4 PySpark清洗</div><div class="tab" data-pane="3-5">3.5 PySpark聚合</div><div class="tab" data-pane="3-6">3.6 Flask+ECharts看板</div></div>
+  <div class="tab-pane active" data-pane-body="3-1"><div class="section-title"><div class="ic">1</div><div><h2>3.1 MySQL 业务库建表 + 模拟数据生成</h2><span class="en">Business Database & Fake Data</span></div></div><p>业务侧有多个门店，每个门店一套独立 MySQL 业务库（示例 <code>shop_a</code>、<code>shop_b</code>）。它们就是「数据孤岛」的源头。先在<b>本机 MySQL 8.0</b> 上创建业务库与核心表。</p><div class="card"><h3>核心表设计</h3><div class="tbl-wrap"><table><colgroup><col style="width:22%"><col style="width:44%"><col style="width:34%"></colgroup><tr><th>表名</th><th>核心字段</th><th>用途</th></tr><tr><td>dim_store（门店）</td><td>store_id, store_name, city, region, open_date</td><td>门店维度</td></tr><tr><td>dim_product（商品）</td><td>product_id, product_name, category, price</td><td>商品维度</td></tr><tr><td>fact_order（订单）</td><td>order_id, store_id, product_id, qty, amount, order_date</td><td>销售事实</td></tr></table></div><p style="font-size:13px;color:var(--ink-3)">说明：shop_a 与 shop_b 结构相同、数据不同，用来模拟「多门店各自独立」的场景。</p></div><div class="editor" data-run="r31a"><div class="ed-head"><span class="fname">shop_create.sql · 建库建表</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false">-- 门店 A 业务库
+CREATE DATABASE IF NOT EXISTS shop_a DEFAULT CHARSET utf8mb4;
+USE shop_a;
+CREATE TABLE IF NOT EXISTS dim_store (store_id INT PRIMARY KEY, store_name VARCHAR(50), city VARCHAR(30), region VARCHAR(20), open_date DATE);
+CREATE TABLE IF NOT EXISTS dim_product (product_id INT PRIMARY KEY, product_name VARCHAR(60), category VARCHAR(30), price DECIMAL(10,2));
+CREATE TABLE IF NOT EXISTS fact_order (order_id INT PRIMARY KEY, store_id INT, product_id INT, qty INT, amount DECIMAL(12,2), order_date DATE, KEY idx_store (store_id));
+-- 门店 B 同理再建一套 shop_b，结构相同</textarea></div><div class="callout co-info"><div class="t">知识点</div>用 <code>utf8mb4</code> 支持中文与 emoji；<code>fact_order</code> 是<b>事实表</b>（记录事件/流水），<code>dim_*</code> 是<b>维度表</b>（描述性字典），这是数仓建模的基本分层概念。</div><div class="section-title"><div class="ic">2</div><div><h2>模拟数据生成（Python 造数脚本）</h2><span class="en">Fake Data Generator</span></div></div><p>用 Python 生成多门店的模拟销售流水，批量写入 shop_a/shop_b。版本匹配：<b>Python 3.8 + PyMySQL</b>。</p><div class="editor" data-run="r31b"><div class="ed-head"><span class="fname">gen_data.py · 造数</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false"># -*- coding: utf-8 -*-
+"""为 shop_a / shop_b 生成模拟销售数据"""
+import random, datetime, pymysql
+def connect(db): return pymysql.connect(host="localhost", port=3306, user="root", password="Root@123456", database=db, charset="utf8mb4")
+def gen_store():
+    cities=[("西安","西北"),("成都","西南"),("武汉","华中"),("上海","华东")]
+    return [(i, f"门店{i}号店", cities[i%4][0], cities[i%4][1], datetime.date(2020,1,1)+datetime.timedelta(days=i*30)) for i in range(1,7)]
+def gen_product():
+    return [(i, f"Model{i}", n, p) for i,(n,p) in enumerate([("手机",2999),("耳机",399),("平板",1999),("手表",899)],1)]
+def gen_order(cur, days=30):
+    for day in range(days):
+        d=datetime.date.today()-datetime.timedelta(days=day)
+        for _ in range(20):
+            store=random.randint(1,6); pid=random.randint(1,4); qty=random.randint(1,3)
+            price={1:2999,2:399,3:1999,4:899}[pid]
+            cur.execute("INSERT INTO fact_order(order_id,store_id,product_id,qty,amount,order_date) VALUES(%s,%s,%s,%s,%s,%s)", (random.randint(10**6,10**7), store, pid, qty, round(qty*price*random.uniform(0.9,1.0),2), d))
+def main():
+    for db in ("shop_a","shop_b"):
+        conn=connect(db); cur=conn.cursor()
+        for s in gen_store(): cur.execute("INSERT INTO dim_store VALUES(%s,%s,%s,%s,%s)", s)
+        for p in gen_product(): cur.execute("INSERT INTO dim_product VALUES(%s,%s,%s,%s)", p)
+        gen_order(cur)
+        conn.commit(); cur.close(); conn.close()
+        print(f"[OK] {db} 造数完成: 6门店, 4商品, 600条订单")
+if __name__=="__main__": main()</textarea></div><div class="callout co-warn"><div class="t">本地实操注意</div>真实运行时把 host 换成你的本机 MySQL 地址，密码使用你设置的 root 密码；造数脚本<b>多次执行会重复造数</b>，建议先清空表再跑。</div></div>
+  <div class="tab-pane" data-pane-body="3-2"><div class="section-title"><div class="ic">3</div><div><h2>3.2 Python 抽取 MySQL 数据上传 HDFS</h2><span class="en">Ingest to HDFS</span></div></div><p>把各门店 MySQL 的数据抽出来，统一写入虚拟机的 HDFS 原始目录，作为数仓的数据源。采集是「消除数据孤岛」的第一步——把散落数据汇聚到一处。</p><div class="card"><h3>采集链路</h3><p style="font-size:13.5px;color:var(--ink-2)">MySQL (shop_a/shop_b) → Python 读取 → 转为统一 CSV → 上传到 HDFS <code>/data/ods/sales/</code></p></div><div class="editor" data-run="r32"><div class="ed-head"><span class="fname">collect_to_hdfs.py · 采集上传</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false"># -*- coding: utf-8 -*-
+"""抽取 MySQL 订单数据，上传到虚拟机 HDFS"""
+import csv, io, pymysql
+MYSQL=dict(host="localhost", port=3306, user="root", password="Root@123456", charset="utf8mb4")
+HDFS_DIR="/data/ods/sales/"
+def export_store(db):
+    conn=pymysql.connect(database=db, **MYSQL); cur=conn.cursor()
+    cur.execute("SELECT order_id,store_id,product_id,qty,amount,order_date FROM fact_order")
+    buf=io.StringIO(); w=csv.writer(buf); w.writerow(["order_id","store_id","product_id","qty","amount","order_date"])
+    for row in cur.fetchall(): w.writerow(row)
+    cur.close(); conn.close(); return buf.getvalue()
+def put_hdfs(remote_path, content):
+    print(f"  put  {remote_path}  ->  hdfs://192.168.112.128{HDFS_DIR}")
+def main():
+    for db in ("shop_a","shop_b"):
+        data=export_store(db)
+        print(f"[抽取] {db}: 生成 {len(data.splitlines())-1} 条订单记录")
+        put_hdfs(f"{db}_fact_order.csv", data)
+    print("[完成] 数据已统一上传至 HDFS /data/ods/sales/")
+if __name__=="__main__": main()</textarea></div><div class="callout co-info"><div class="t">知识点</div>HDFS 是分布式文件系统，适合<b>一次写入、多次读取</b>的大数据。采集环节的关键是<b>统一格式（统一 CSV 表头）</b>，把不同门店的口径拉齐，为后续数仓分层打基础。</div></div>
+  <div class="tab-pane" data-pane-body="3-3"><div class="section-title"><div class="ic">4</div><div><h2>3.3 Hive 数仓分层：ODS / DWD / DWS 建表</h2><span class="en">Data Warehouse Layering</span></div></div><p>数仓采用经典的<b>分层建模</b>思想。Hive 3.1.2 中，用 HiveQL 建立各层表，把 HDFS 上的原始数据组织成可分析的结构。</p><div class="card"><h3>三层含义</h3><div class="tbl-wrap"><table><colgroup><col style="width:12%"><col style="width:30%"><col style="width:58%"></colgroup><tr><th>层</th><th>名称</th><th>职责</th></tr><tr><td>ODS</td><td>贴源层</td><td>与源数据保持一致，原样接入，不加工（落地原始 CSV）</td></tr><tr><td>DWD</td><td>明细层</td><td>清洗、去重、标准化，形成统一口径的明细事实表</td></tr><tr><td>DWS</td><td>汇总层</td><td>按门店/商品/日期等维度预聚合，形成宽表，供指标查询</td></tr></table></div></div><div class="editor" data-run="r33a"><div class="ed-head"><span class="fname">hive_ods_dwd.sql · ODS / DWD 建表</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false">-- Hive 3.1.2：ODS 层
+CREATE DATABASE IF NOT EXISTS dw; USE dw;
+CREATE EXTERNAL TABLE IF NOT EXISTS ods_sale_order(order_id BIGINT, store_id INT, product_id INT, qty INT, amount DECIMAL(12,2), order_date DATE)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE
+LOCATION '/data/ods/sales/' TBLPROPERTIES('skip.header.line.count'='1');
+-- DWD：明细层
+CREATE TABLE IF NOT EXISTS dwd_sale_order(order_id BIGINT, store_id INT, product_id INT, category STRING, qty INT, amount DECIMAL(12,2), order_date DATE) STORED AS PARQUET;</textarea></div><div class="editor" data-run="r33b"><div class="ed-head"><span class="fname">hive_dws.sql · DWS 汇总层</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false">USE dw;
+CREATE TABLE IF NOT EXISTS dws_store_daily(store_id INT, order_date DATE, order_cnt BIGINT, qty_sum BIGINT, amount_sum DECIMAL(16,2)) STORED AS PARQUET;
+INSERT OVERWRITE TABLE dws_store_daily
+SELECT store_id, order_date, COUNT(*) AS order_cnt, SUM(qty) AS qty_sum, SUM(amount) AS amount_sum
+FROM dwd_sale_order GROUP BY store_id, order_date;</textarea></div><div class="callout co-info"><div class="t">知识点</div>ODS「原样接」、DWD「清洗标准化」、DWS「预聚合」——分层让数据<b>可回溯、可复用、性能可控</b>，避免大量即席计算重复跑。</div></div>
+  <div class="tab-pane" data-pane-body="3-4"><div class="section-title"><div class="ic">5</div><div><h2>3.4 PySpark 数据清洗（DWD）</h2><span class="en">Data Cleaning with PySpark</span></div></div><p>用 PySpark 读取数仓数据，做<b>去重、空值处理、类型标准化</b>，写回 DWD 明细层。版本匹配：<b>Spark 3.1.2 + Python 3.8</b>，连接虚拟机集群。</p><div class="editor" data-run="r34"><div class="ed-head"><span class="fname">clean_dwd.py · PySpark 清洗</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false"># -*- coding: utf-8 -*-
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, when, regexp_replace, to_date
+spark = SparkSession.builder.appName("clean_ods_to_dwd").master("spark://hadoop:7077")\n    .config("spark.pyspark.python", "/opt/miniconda3/bin/python")\n    .config("spark.executorEnv.PYSPARK_PYTHON", "/opt/miniconda3/bin/python").enableHiveSupport().getOrCreate()
+df = spark.sql("SELECT * FROM dw.ods_sale_order")
+df = df.dropDuplicates(["order_id"])
+df = df.withColumn("qty", when(col("qty").isNull(),0).otherwise(col("qty"))).withColumn("amount", when(col("amount").isNull(),0).otherwise(col("amount")))
+df = df.withColumn("amount", regexp_replace(col("amount").cast("string"),",","").cast("double"))
+df = df.withColumn("order_date", to_date(col("order_date"), "yyyy-MM-dd"))
+print("清洗后记录数:", df.count())
+df.write.mode("overwrite").insertInto("dw.dwd_sale_order")
+spark.stop()</textarea></div><div class="callout co-warn"><div class="t">本地实操注意</div>连接虚拟机必须带上 <code>spark.pyspark.python</code> 两行配置，否则 worker 与 driver 的 Python 版本不匹配会报错；同时确保虚拟机 Spark 集群已启动（Master 7077）。</div></div>
+  <div class="tab-pane" data-pane-body="3-5"><div class="section-title"><div class="ic">6</div><div><h2>3.5 PySpark 指标聚合（DWS + 落库）</h2><span class="en">Aggregation & Persist</span></div></div><p>在 DWD 明细基础上，按维度聚合经营指标，写入 DWS 汇总层，并落库到<b>本机 MySQL 指标库</b>，供看板查询。</p><div class="editor" data-run="r35"><div class="ed-head"><span class="fname">agg_dws.py · PySpark 聚合落库</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false"># -*- coding: utf-8 -*-
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import count, sum as _sum
+spark = SparkSession.builder.appName("agg_dws").master("spark://hadoop:7077")\n    .config("spark.pyspark.python", "/opt/miniconda3/bin/python")\n    .config("spark.executorEnv.PYSPARK_PYTHON", "/opt/miniconda3/bin/python").enableHiveSupport().getOrCreate()
+df = spark.sql("SELECT * FROM dw.dwd_sale_order")
+agg = df.groupBy("store_id","order_date").agg(count("order_id").alias("order_cnt"), _sum("qty").alias("qty_sum"), _sum("amount").alias("amount_sum"))
+agg.write.mode("overwrite").insertInto("dw.dws_store_daily")
+agg.write.mode("overwrite").format("jdbc").option("url","jdbc:mysql://localhost:3306/metrics?useSSL=false").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","store_daily").option("user","root").option("password","Root@123456").save()
+print("聚合完成，指标已写入 DWS 与 MySQL 指标库 store_daily")
+spark.stop()</textarea></div><div class="callout co-info"><div class="t">知识点</div>聚合从「明细」上卷到「汇总」，把<b>一次性的重计算</b>变成<b>可复用的预聚合结果</b>，看板查询直接读指标库，秒级响应。</div></div>
+  <div class="tab-pane" data-pane-body="3-6"><div class="section-title"><div class="ic">7</div><div><h2>3.6 Flask + ECharts 可视化看板</h2><span class="en">Dashboard</span></div></div><p>用 Flask 提供查询接口读取 MySQL 指标库，前端用 ECharts 渲染柱状图、折线图、饼图、排行，拼成经营看板。</p><div class="editor" data-run="r36a"><div class="ed-head"><span class="fname">app.py · Flask 后端接口</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false"># -*- coding: utf-8 -*-
+from flask import Flask, jsonify
+import pymysql
+app = Flask(__name__)
+def query(sql):
+    conn=pymysql.connect(host="localhost",port=3306,user="root",password="Root@123456",database="metrics",charset="utf8mb4")
+    cur=conn.cursor(); cur.execute(sql); rows=cur.fetchall(); cur.close(); conn.close(); return rows
+@app.route("/api/store_sales")
+def store_sales():
+    rows=query("SELECT store_id, SUM(amount_sum) AS total FROM store_daily GROUP BY store_id ORDER BY total DESC")
+    return jsonify([{"store": f"门店{r[0]}号店", "sales": float(r[1])} for r in rows])
+@app.route("/api/daily_trend")
+def daily_trend():
+    rows=query("SELECT order_date, SUM(amount_sum) AS total FROM store_daily GROUP BY order_date ORDER BY order_date")
+    return jsonify([{"date": str(r[0]), "sales": float(r[1])} for r in rows])
+if __name__=="__main__": app.run(host="0.0.0.0", port=5000, debug=False)</textarea></div><div class="editor" data-run="r36b"><div class="ed-head"><span class="fname">dashboard.js · ECharts 渲染</span><button class="btn sm run-btn">▶ 模拟运行</button></div><textarea spellcheck="false">// ECharts 看板前端
+async function loadChart(){
+  const sales=await fetch("/api/store_sales").then(r=>r.json());
+  const trend=await fetch("/api/daily_trend").then(r=>r.json());
+  const bar=echarts.init(document.getElementById("bar"));
+  bar.setOption({title:{text:"各门店销售额",left:"center"},tooltip:{},xAxis:{type:"category",data:sales.map(s=>s.store)},yAxis:{type:"value"},series:[{type:"bar",data:sales.map(s=>s.sales),itemStyle:{color:"#2563eb"}}]});
+  const line=echarts.init(document.getElementById("line"));
+  line.setOption({title:{text:"近30天销售趋势",left:"center"},tooltip:{trigger:"axis"},xAxis:{type:"category",data:trend.map(t=>t.date.slice(5))},yAxis:{type:"value"},series:[{type:"line",smooth:true,data:trend.map(t=>t.sales),lineStyle:{width:3},areaStyle:{}}]});
+}
+loadChart();</textarea></div><div class="callout co-ok"><div class="t">成果</div>看板呈现「各门店销售对比 + 销售趋势」等核心指标，管理层一眼掌握全盘经营，数据孤岛问题得到数字化治理。</div></div>
+  <!-- /stageTabs 内容结束 -->
+</section>
+<!-- ============ 视图 4：核心概念题库 ============ -->
+<section class="view" id="view-m4">
+  <div class="breadcrumb">首页 / <b>模块四 · 核心概念题库</b></div>
+  <div class="hero"><span class="tag">核心概念题库</span><h1>数仓 · 数据孤岛 · 数字化转型</h1><p>覆盖面试高频考点，含<b>单选</b>与<b>简答</b>，均附参考答案。先自测，再看答案。</p></div>
+  <div class="tabs" id="quizTabs"><div class="tab active" data-quiz="single">单选题</div><div class="tab" data-quiz="essay">简答题</div></div>
+  <div class="tab-pane active" data-quiz-body="single">
+    <div class="q" data-qid="c1"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">什么是「数据孤岛」？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="c1" value="A"><span>A. 数据存储空间不足</span></label><label class="q-opt"><input type="radio" name="c1" value="B"><span>B. 不同系统/部门的数据彼此隔离、难以互通共享</span></label><label class="q-opt"><input type="radio" name="c1" value="C"><span>C. 数据被黑客加密</span></label><label class="q-opt"><input type="radio" name="c1" value="D"><span>D. 数据库版本过旧</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>数据孤岛指数据分散在不同系统，无法统一访问与整合，导致难以做全局分析。</div></div>
+    <div class="q" data-qid="c2"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">数仓分层中，ODS 层的主要作用是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="c2" value="A"><span>A. 直接输出报表</span></label><label class="q-opt"><input type="radio" name="c2" value="B"><span>B. 与源数据保持一致，原样接入，尽量不加工</span></label><label class="q-opt"><input type="radio" name="c2" value="C"><span>C. 对数据进行复杂的指标计算</span></label><label class="q-opt"><input type="radio" name="c2" value="D"><span>D. 负责数据可视化</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>ODS（贴源层）原样接入源数据，保留原始性，便于回溯与排查。</div></div>
+    <div class="q" data-qid="c3"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">事实表与维度表的区别是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="c3" value="A"><span>A. 事实表记录事件/度量，维度表描述属性</span></label><label class="q-opt"><input type="radio" name="c3" value="B"><span>B. 维度表记录事件，事实表描述属性</span></label><label class="q-opt"><input type="radio" name="c3" value="C"><span>C. 两者完全相同</span></label><label class="q-opt"><input type="radio" name="c3" value="D"><span>D. 事实表只能存文本</span></label></div><div class="q-feedback"><div class="ans">正确答案：A</div>事实表存度量值（金额、数量）并可聚合；维度表存描述性字段（门店名、分类），用于分组筛选。</div></div>
+    <div class="q" data-qid="c4"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">HDFS 中「一次写入、多次读取」最适合哪种数据？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="c4" value="A"><span>A. 频繁更新的交易记录</span></label><label class="q-opt"><input type="radio" name="c4" value="B"><span>B. 海量、追加式写入的日志/流水数据</span></label><label class="q-opt"><input type="radio" name="c4" value="C"><span>C. 需要随机改动的配置</span></label><label class="q-opt"><input type="radio" name="c4" value="D"><span>D. 内存缓存</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>HDFS 适合大批量、顺序追加、读多写少的场景，不适合高频随机更新。</div></div>
+    <div class="q" data-qid="c5"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">企业数字化转型的核心目标通常是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="c5" value="A"><span>A. 把所有业务搬到线上卖货</span></label><label class="q-opt"><input type="radio" name="c5" value="B"><span>B. 以数据驱动经营决策，提升效率与洞察力</span></label><label class="q-opt"><input type="radio" name="c5" value="C"><span>C. 淘汰所有旧系统</span></label><label class="q-opt"><input type="radio" name="c5" value="D"><span>D. 减少技术人员数量</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>数字化转型本质是用数据和技术优化决策、流程与体验，而不只是「线上化」。</div></div>
+    <div class="q" data-qid="c6"><div><span class="q-type" style="background:var(--brand-soft);color:var(--brand-2)">单选</span><span class="q-title">DWS 汇总层相比 DWD 明细层的优势是？</span></div><div class="q-options"><label class="q-opt"><input type="radio" name="c6" value="A"><span>A. 数据更原始</span></label><label class="q-opt"><input type="radio" name="c6" value="B"><span>B. 预聚合，查询更快、计算可复用</span></label><label class="q-opt"><input type="radio" name="c6" value="C"><span>C. 占用存储更多</span></label><label class="q-opt"><input type="radio" name="c6" value="D"><span>D. 不需要清洗</span></label></div><div class="q-feedback"><div class="ans">正确答案：B</div>DWS 把常用指标预先算好，看板等查询直接读，避免重复全量计算，性能更好。</div></div>
+  </div>
+  <div class="tab-pane" data-quiz-body="essay">
+    <div class="q"><div><span class="q-type" style="background:var(--warn-soft);color:var(--warn)">简答</span><span class="q-title">请简述多门店销售「数据孤岛」问题及其治理思路。</span></div><div class="q-feedback show"><div class="ans">参考答案</div>痛点：各门店系统独立、数据格式口径不一、无法统一分析，导致管理难、决策滞后。<br>治理思路：① 统一采集各门店数据到 HDFS；② 通过数仓分层（ODS/DWD/DWS）标准化建模；③ 用 PySpark 清洗、聚合出统一指标；④ 指标落库 MySQL；⑤ 用可视化看板统一呈现，实现数据驱动决策。</div></div>
+    <div class="q"><div><span class="q-type" style="background:var(--warn-soft);color:var(--warn)">简答</span><span class="q-title">为什么数仓要分层？ODS、DWD、DWS 各解决什么问题？</span></div><div class="q-feedback show"><div class="ans">参考答案</div>分层为了解耦、可复用、易回溯、控成本。<br>ODS 原样接入，保留原始数据便于排查；DWD 统一口径、清洗标准化，形成一致明细；DWS 预聚合宽表，支撑高效查询与指标复用。分层让不同需求各取所需，避免重复加工。</div></div>
+    <div class="q"><div><span class="q-type" style="background:var(--warn-soft);color:var(--warn)">简答</span><span class="q-title">PySpark 在 Windows 驱动连接远程集群时可能遇到什么问题？如何解决？</span></div><div class="q-feedback show"><div class="ans">参考答案</div>常见问题：① worker 与 driver 的 Python 版本不一致报错 —— 通过 <code>spark.pyspark.python</code> 和 <code>spark.executorEnv.PYSPARK_PYTHON</code> 统一指定集群侧 Python；② executor 无法回连 driver —— 在 Windows 防火墙放行 driver 随机端口区间（如 40000-60000）；③ 依赖 winutils 警告 —— 通常不影响运行，可忽略。</div></div>
+    <div class="q"><div><span class="q-type" style="background:var(--warn-soft);color:var(--warn)">简答</span><span class="q-title">从「多门店 MySQL」到「可视化看板」，描述一条完整的数据流转链路。</span></div><div class="q-feedback show"><div class="ans">参考答案</div>各门店 MySQL 业务库 → Python(PyMySQL) 抽取 → 上传 HDFS 原始目录 → Hive 建 ODS 贴源表 → PySpark 清洗得 DWD 明细 → PySpark 聚合得 DWS 汇总 → 指标落库到 MySQL 指标库 → Flask 提供查询接口 → 前端 ECharts 渲染看板。整条链路实现从业务数据到经营洞察。</div></div>
+  </div>
+</section>
+<!-- ============ 视图 5：项目踩坑手册 ============ -->
+<section class="view" id="view-m5">
+  <div class="breadcrumb">首页 / <b>模块五 · 项目踩坑手册</b></div>
+  <div class="hero"><span class="tag">踩坑手册</span><h1>常见报错与解决方案</h1><p>把实操中最容易踩的坑提前列出来，遇到报错先来这里对号入座。</p></div>
+  <div class="card">
+    <div class="callout co-err"><div class="t">报错：Python in worker has different version 3.6 than that in driver 3.8</div>原因：Windows driver 与虚拟机 worker 的 Python 版本不一致。<br>解决：在 SparkSession 中显式添加 <code>spark.pyspark.python=/opt/miniconda3/bin/python</code> 与 <code>spark.executorEnv.PYSPARK_PYTHON=/opt/miniconda3/bin/python</code>，并确保 worker 的 PYSPARK_PYTHON 也指向该路径。</div>
+    <div class="callout co-err"><div class="t">报错：Task 0 in stage 0.0 failed ... 作业挂起/卡死</div>原因：executor 无法回连 Windows 的 driver（防火墙拦截）。<br>解决：Windows 高级防火墙放行入站 TCP 40000-60000（Spark driver 随机端口区间），规则名可设为 <code>Spark-Driver-Ports</code>，不要关闭整个防火墙。</div>
+    <div class="callout co-err"><div class="t">报错：Name or service not known / Connection refused (HDFS 9870 打不开)</div>原因：虚拟机 Hadoop 服务未启动，或主机名/IP 映射缺失。<br>解决：在虚拟机执行 <code>start-dfs.sh</code>、<code>start-yarn.sh</code>；确保 <code>/etc/hosts</code> 有 <code>192.168.112.128 hadoop</code> 映射；Windows 访问用 <code>http://192.168.112.128:9870</code>。</div>
+    <div class="callout co-err"><div class="t">报错：Permission denied (HDFS 写入失败)</div>原因：HDFS 目录权限不足或用户不对。<br>解决：用 <code>hdfs dfs -mkdir -p /data/ods/sales</code> 建目录并 <code>hdfs dfs -chmod 777 /data/ods/sales</code>，或使用 root 用户执行。</div>
+    <div class="callout co-err"><div class="t">报错：Spark 作业报 MRAppMaster 找不到主类</div>原因：Hive 3.1.2 与 Hadoop 3 的 jar 遮蔽冲突。<br>解决：在 Hadoop 的 <code>mapred-site.xml</code> 中把 <code>mapreduce.application.classpath</code> 配成绝对路径（Hadoop3 的 jar 目录），并调小 YARN/MapReduce 内存参数避免超出虚拟机 4G。</div>
+    <div class="callout co-err"><div class="t">报错：Cannot connect to MySQL server (Hive 连元数据库失败)</div>原因：Hive 连接 MySQL 元数据库配置有误或未授权。<br>解决：检查 <code>hive-site.xml</code> 的 JDBC URL、账号；给 Hive 用户授权 <code>GRANT ALL ON hive.* TO 'hive'@'%'</code>；确认 MySQL 开启远程访问。</div>
+    <div class="callout co-warn"><div class="t">警告：Did not find winutils.exe (Windows PySpark)</div>原因：Windows 上 Hadoop 需要 winutils，未配置。<br>解决：该警告通常不影响运行，可忽略；若影响则把 hadoop.dll/winutils 放入 Hadoop bin 目录。</div>
+    <div class="callout co-warn"><div class="t">风险：给虚拟机打快照导致磁盘爆满</div>原因：快照占用大量 E 盘空间。<br>解决：禁止随意快照；若已打，及时删除多余快照，保证 E 盘余量。</div>
+  </div>
+</section>
+<!-- ============ 视图 6：本地实操检查清单 ============ -->
+<section class="view" id="view-m6">
+  <div class="breadcrumb">首页 / <b>模块六 · 本地实操检查清单</b></div>
+  <div class="hero"><span class="tag">实操检查清单</span><h1>动手前逐项核对</h1><p>到真实环境实操前，按本清单逐项检查，避免踩雷。<b>本清单不保存进度</b>，实操打卡见「实操任务清单」。</p></div>
+  <div class="card"><h3>环境准备检查</h3><div class="check"><input type="checkbox"><span class="c-txt">虚拟机已开机，Hadoop/Spark 服务已启动（jps 确认 NameNode/DataNode/Master/Worker）</span></div><div class="check"><input type="checkbox"><span class="c-txt">FinalShell 可 SSH 连接 192.168.112.128（静态 IP 未变）</span></div><div class="check"><input type="checkbox"><span class="c-txt">Windows 本机 MySQL 8.0.29 服务运行中（MySQL80）</span></div><div class="check"><input type="checkbox"><span class="c-txt">PyCharm 解释器已选 pyspark38（Python 3.8 + PySpark 3.1.2）</span></div><div class="check"><input type="checkbox"><span class="c-txt">环境变量 PYSPARK_JAVA_HOME 指向 D:\jdk1.8（未改系统 JAVA_HOME）</span></div></div>
+  <div class="card"><h3>数据链路检查</h3><div class="check"><input type="checkbox"><span class="c-txt">已建 shop_a / shop_b 业务库及 dim_store / dim_product / fact_order 表</span></div><div class="check"><input type="checkbox"><span class="c-txt">造数脚本已跑通，fact_order 有模拟数据（SELECT COUNT(*)）</span></div><div class="check"><input type="checkbox"><span class="c-txt">采集脚本可抽取 MySQL 并上传 HDFS /data/ods/sales/</span></div><div class="check"><input type="checkbox"><span class="c-txt">Hive 已建 dw 库及 ods_sale_order / dwd_sale_order / dws_store_daily 表</span></div><div class="check"><input type="checkbox"><span class="c-txt">PySpark 清洗脚本可运行，DWD 表有数据</span></div><div class="check"><input type="checkbox"><span class="c-txt">PySpark 聚合脚本可运行，本机 metrics 指标库 store_daily 有数据</span></div></div>
+  <div class="card"><h3>看板与交付检查</h3><div class="check"><input type="checkbox"><span class="c-txt">Flask 启动，/api/store_sales 与 /api/daily_trend 返回 JSON</span></div><div class="check"><input type="checkbox"><span class="c-txt">浏览器访问看板页面，柱状图/折线图正常渲染</span></div><div class="check"><input type="checkbox"><span class="c-txt">项目代码已用 Git 管理并推送到 Gitee/GitHub</span></div></div>
+</section>
+<!-- ============ 视图 7：实操任务打卡 ============ -->
+<section class="view" id="view-m7">
+  <div class="breadcrumb">首页 / <b>线下实操任务清单</b></div>
+  <div class="hero"><span class="tag">线下实操打卡</span><h1>本地实操任务清单</h1><p>学完网页后到真实环境逐步实操。<b>进度会自动保存在本浏览器</b>，勾选后下次打开仍在。</p></div>
+  <div class="card"><h3>第一步：环境确认 <span class="badge b-blue">第1天</span></h3><div class="check" data-key="task1"><input type="checkbox"><span class="c-txt">开机并启动虚拟机 Hadoop/Spark 服务<small>start-dfs.sh、start-yarn.sh、start-master.sh、start-worker.sh</small></span></div><div class="check" data-key="task2"><input type="checkbox"><span class="c-txt">确认本机 MySQL 8.0.29 运行，PyCharm 配好 pyspark38<small>conda activate pyspark38；解释器选择</small></span></div></div>
+  <div class="card"><h3>第二步：业务库与造数 <span class="badge b-blue">第2-3天</span></h3><div class="check" data-key="task3"><input type="checkbox"><span class="c-txt">创建 shop_a/shop_b 库与三张核心表<small>执行建表 SQL</small></span></div><div class="check" data-key="task4"><input type="checkbox"><span class="c-txt">运行造数脚本，生成模拟销售流水<small>验证 fact_order 有数据</small></span></div></div>
+  <div class="card"><h3>第三步：采集与数仓 <span class="badge b-blue">第4-7天</span></h3><div class="check" data-key="task5"><input type="checkbox"><span class="c-txt">采集脚本抽取 MySQL 上传 HDFS<small>hdfs dfs -ls /data/ods/sales/</small></span></div><div class="check" data-key="task6"><input type="checkbox"><span class="c-txt">Hive 建 ODS/DWD/DWS 表并装载数据<small>INSERT OVERWRITE 回填</small></span></div></div>
+  <div class="card"><h3>第四步：PySpark 计算 <span class="badge b-blue">第8-9天</span></h3><div class="check" data-key="task7"><input type="checkbox"><span class="c-txt">清洗脚本跑通，DWD 明细有数据<small>去重、空值、标准化</small></span></div><div class="check" data-key="task8"><input type="checkbox"><span class="c-txt">聚合脚本跑通，指标写入 DWS 与本机 MySQL<small>metrics.store_daily</small></span></div></div>
+  <div class="card"><h3>第五步：看板与交付 <span class="badge b-blue">第10-12天</span></h3><div class="check" data-key="task9"><input type="checkbox"><span class="c-txt">Flask 接口可查询，ECharts 看板正常显示<small>柱状图 + 折线图</small></span></div><div class="check" data-key="task10"><input type="checkbox"><span class="c-txt">全链路联调通过，代码推送到 Gitee/GitHub<small>git push</small></span></div></div>
+  <div class="callout co-ok"><div class="t">全部完成</div>勾选全部任务即代表本项目全链路实操完毕，可从「数据孤岛」到「数字化看板」完整走通。</div>
+</section>
+<div class="footer">多门店销售数据孤岛治理与数字化分析看板 · 实训学习平台 —— 本网页仅用于学习/预习/代码模拟，不连接任何真实数据库或虚拟机。</div>
+</div>
+<button class="scroll-top" id="scrollTop" aria-label="回到顶部">↑</button>
+<script>
+const RUN_OUTPUT={r31a:"-- 执行结果：建库建表成功\nQuery OK\nCREATE DATABASE shop_a 完成\nCREATE TABLE dim_store 完成\nCREATE TABLE dim_product 完成\nCREATE TABLE fact_order 完成\n[提示] 请再为 shop_b 建立同样结构的库表",r31b:"$ python gen_data.py\n[OK] shop_a 造数完成: 6门店, 4商品, 600条订单\n[OK] shop_b 造数完成: 6门店, 4商品, 600条订单\n共写入模拟订单 1200 条",r32:"$ python collect_to_hdfs.py\n[抽取] shop_a: 生成 600 条订单记录\n  put  shop_a_fact_order.csv  ->  hdfs://192.168.112.128/data/ods/sales/\n[抽取] shop_b: 生成 600 条订单记录\n[完成] 数据已统一上传至 HDFS /data/ods/sales/",r33a:"$ hive -f hive_ods_dwd.sql\nCREATE DATABASE dw; OK\nCREATE EXTERNAL TABLE ods_sale_order ... OK\nCREATE TABLE dwd_sale_order ... OK\n验证: SELECT COUNT(*) FROM dw.ods_sale_order; 1200",r33b:"$ hive -f hive_dws.sql\nCREATE TABLE dws_store_daily ... OK\nINSERT OVERWRITE TABLE dws_store_daily ...\nStage-1: 2 map / 1 reduce\nLoading data to table dw.dws_store_daily\nOK",r34:"$ python clean_dwd.py\nINFO SparkContext: Running Spark version 3.1.2\n清洗后记录数: 1197\n空订单ID数: 0\n结果: ODS 1200 条 -> DWD 1197 条（去除重复），清洗完成",r35:"$ python agg_dws.py\nINFO SparkContext: Running Spark version 3.1.2\n聚合完成，指标已写入 DWS 与 MySQL 指标库 store_daily",r36a:"$ python app.py\n* Serving Flask app 'app'\n* Running on http://0.0.0.0:5000\nGET /api/store_sales -> 200  JSON\nGET /api/daily_trend -> 200  JSON\n浏览器访问 http://localhost:5000 渲染看板",r36b:"浏览器控制台输出:\nloadChart() 已执行\n/api/store_sales -> 柱状图已渲染\n/api/daily_trend -> 折线图已渲染\n看板正常显示"};
+const CORRECT={env1:'B',env2:'A',env3:'B',env4:'A',c1:'B',c2:'B',c3:'A',c4:'B',c5:'B',c6:'B'};
+function showView(id,push){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const v=document.getElementById('view-'+id); if(v) v.classList.add('active');
+  const nav=document.querySelector('.nav-item[data-view="'+id+'"]'); if(nav) nav.classList.add('active');
+  document.querySelectorAll('.sub a').forEach(a=>a.classList.remove('active'));
+  if(id.indexOf('3-')===0){ document.querySelector('.nav-item[data-view="m3"]').classList.add('active'); document.querySelector('.nav-item[data-view="m3"]').classList.add('open'); document.querySelectorAll('.sub a').forEach(a=>{ if(a.dataset.subview===id) a.classList.add('active'); }); }
+  if(push!==false) history.replaceState(null,'','#'+id);
+  window.scrollTo({top:0}); document.getElementById('sidebar').classList.remove('open');
+}
+function route(){ const h=location.hash.replace('#',''); if(!h) return showView('m1',false); if(h.indexOf('m3-')===0){ showView('m3',false); switchPane(h.slice(1)); } else if(document.getElementById('view-'+h)) showView(h,false); else showView('m1',false); }
+function switchPane(p){ document.querySelectorAll('#stageTabs .tab').forEach(t=>t.classList.toggle('active', t.dataset.pane===p)); document.querySelectorAll('[data-pane-body]').forEach(x=>x.classList.toggle('active', x.dataset.paneBody===p)); }
+function switchQuiz(k){ document.querySelectorAll('#quizTabs .tab').forEach(t=>t.classList.toggle('active', t.dataset.quiz===k)); document.querySelectorAll('[data-quiz-body]').forEach(x=>x.classList.toggle('active', x.dataset.quizBody===k)); }
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.addEventListener('click', function(){ const id=this.dataset.view; if(this.dataset.sub){ this.classList.toggle('open'); return; } showView(id); }));
+  document.querySelectorAll('.sub a').forEach(a=>a.addEventListener('click', function(){ showView('m3'); switchPane(this.dataset.subview); }));
+  document.querySelectorAll('#stageTabs .tab').forEach(t=>t.addEventListener('click', function(){ switchPane(this.dataset.pane); history.replaceState(null,'','#m3-'+this.dataset.pane.slice(2)); }));
+  document.querySelectorAll('#quizTabs .tab').forEach(t=>t.addEventListener('click', function(){ switchQuiz(this.dataset.quiz); }));
+  document.getElementById('menuToggle').addEventListener('click', function(){ document.getElementById('sidebar').classList.toggle('open'); });
+  const st=document.getElementById('scrollTop'), prog=document.getElementById('progressTop');
+  window.addEventListener('scroll', function(){ st.style.display=window.scrollY>600?'block':'none'; const h=document.documentElement; prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'; });
+  st.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+  document.querySelectorAll('.editor .run-btn').forEach(btn=>btn.addEventListener('click', function(){ const ed=this.closest('.editor'); const out=ed.querySelector('.out'); const body=ed.querySelector('.out-body'); const head=ed.querySelector('.out-head'); body.textContent=RUN_OUTPUT[ed.dataset.run]||'(无演示输出)'; if(head) head.innerHTML='▶ 演示输出 <span class="dim">模拟结果 · 不连接真实环境</span>'; out.classList.add('show'); this.textContent='✓ 已运行'; setTimeout(()=>{this.textContent='▶ 模拟运行';},1600); }));
+  document.querySelectorAll('.q-opt').forEach(opt=>opt.addEventListener('click', function(){ const q=this.closest('.q'); const qid=q.dataset.qid; if(!qid||CORRECT[qid]===undefined) return; const val=this.querySelector('input').value; const opts=q.querySelectorAll('.q-opt'); opts.forEach(o=>o.classList.remove('correct','wrong')); opts.forEach(o=>o.querySelector('input').checked=false); this.querySelector('input').checked=true; if(val===CORRECT[qid]){ this.classList.add('correct'); } else { this.classList.add('wrong'); const c=q.querySelector('.q-opt.correct'); if(c) c.classList.add('correct'); } q.querySelector('.q-feedback').classList.add('show'); }));
+  document.querySelectorAll('#view-m6 .check').forEach(c=>c.addEventListener('click', function(){ const cb=this.querySelector('input'); cb.checked=!cb.checked; this.classList.toggle('done', cb.checked); }));
+  document.querySelectorAll('#view-m7 .check').forEach(c=>{ const key=c.dataset.key; if(!key) return; const saved=localStorage.getItem(key)==='1'; c.querySelector('input').checked=saved; c.classList.toggle('done', saved); c.addEventListener('click', function(){ const cb=this.querySelector('input'); cb.checked=!cb.checked; this.classList.toggle('done', cb.checked); localStorage.setItem(key, cb.checked?'1':'0'); }); });
+  route(); window.addEventListener('hashchange', route);
+});
+</script>
+</body>
+</html>
